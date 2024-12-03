@@ -11,7 +11,7 @@ public class BaseEntity
     public Guid Id { get; set; }
     
     /// <summary>
-    /// Для демонстрации домашки
+    /// Переделано!
     /// </summary>
     public DateTime Created { get; set; }
 
