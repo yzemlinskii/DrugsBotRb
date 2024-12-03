@@ -10,6 +10,9 @@ public class BaseEntity
     /// </summary>
     public Guid Id { get; set; }
     
+    /// <summary>
+    /// Для демонстрации домашки
+    /// </summary>
     public DateTime Created { get; set; }
 
     /// <summary>
