@@ -1,4 +1,8 @@
-﻿namespace Domain.Entities
+﻿using Ardalis.GuardClauses;
+using Domain.Primitives;
+using Domain.Validators;
+
+namespace Domain.Entities
 {
     /// <summary>
     /// Справочник стран
@@ -8,12 +12,18 @@
         /// <summary>
         /// Конструктор для инициализации страны с названием и кодом.
         /// </summary>
-        /// <param name="name">Название страны.</param>
-        /// <param name="code">Код страны.</param>
+        /// <param name="name">Название страны. Обязательное поле.</param>
+        /// <param name="code">Код страны. Обязательное поле.</param>
         public Country(string name, string code)
         {
-            Name = name;
-            Code = code;
+            Name = Guard.Against.NullOrWhiteSpace(name, nameof(name), ValidationMessage.NullOrWhitespaceMessage);
+            Code = Guard.Against.NullOrWhiteSpace(code, nameof(code), ValidationMessage.NullOrWhitespaceMessage);
+
+            /// <summary>
+            /// Валидация переданых параметров
+            /// </summary>
+            var validator = new CountryValidator();
+            validator.Validate(this);
         }
 
         /// <summary>

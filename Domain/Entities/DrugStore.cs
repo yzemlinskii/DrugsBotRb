@@ -1,4 +1,8 @@
-﻿using Domain.ValueObjects;
+﻿using Ardalis.GuardClauses;
+using Domain.Primitives;
+using System.Xml.Linq;
+using Domain.ValueObjects;
+using Domain.Validators;
 
 namespace Domain.Entities
 {
@@ -7,11 +11,23 @@ namespace Domain.Entities
     /// </summary>
     public class DrugStore : BaseEntity
     {
+        /// <summary>
+        /// Конструктор для инициализации класса с аптекой.
+        /// </summary>
+        /// <param name="drugNetwork">Название аптечной сети. Обязательное поле.</param>
+        /// <param name="number">Номер аптеки. Должно быть больше нуля.</param>
+        /// <param name="address">Адрес аптеки. Обязательное поле.</param>
         public DrugStore(string drugNetwork, int number, Address address)
         {
-            DrugNetwork = drugNetwork;
-            Number = number;
-            Address = address;
+            DrugNetwork = Guard.Against.NullOrWhiteSpace(drugNetwork, nameof(drugNetwork), ValidationMessage.NullOrWhitespaceMessage);
+            Number = Guard.Against.Negative(number, nameof(number), ValidationMessage.InvalidValueMessage);
+            Address = Guard.Against.Null(address, nameof(address), ValidationMessage.NullOrWhitespaceMessage);
+
+            /// <summary>
+            /// Валидация переданых параметров
+            /// </summary>
+            var validator = new DrugStoreValidator();
+            validator.Validate(this);
         }
 
         /// <summary>

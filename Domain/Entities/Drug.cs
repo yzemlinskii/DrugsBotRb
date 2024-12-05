@@ -1,15 +1,31 @@
-﻿namespace Domain.Entities
+﻿using Ardalis.GuardClauses;
+using Domain.Primitives;
+using Domain.Validators;
+
+namespace Domain.Entities
 {
     /// <summary>
     /// Лекарственный препарат
     /// </summary>
     public class Drug : BaseEntity
     {
+        /// <summary>
+        /// Конструктор для инициализации класса с препаратом.
+        /// </summary>
+        /// <param name="name">Название препарата. Обязательное поле.</param>
+        /// <param name="manufacturer">Производитель. Обязательное поле.</param>
+        /// <param name="countryCodeId">Код страны(ISO). Обязательное поле.</param>
         public Drug(string name, string manufacturer, string countryCodeId)
         {
-            Name = name;
-            Manufacturer = manufacturer;
-            CountryCodeId = countryCodeId;
+            Name = Guard.Against.NullOrWhiteSpace(name, nameof(name), ValidationMessage.NullOrWhitespaceMessage);
+            Manufacturer = Guard.Against.NullOrWhiteSpace(manufacturer, nameof(manufacturer), ValidationMessage.NullOrWhitespaceMessage);
+            CountryCodeId = Guard.Against.NullOrWhiteSpace(countryCodeId, nameof(countryCodeId), ValidationMessage.NullOrWhitespaceMessage);
+
+            /// <summary>
+            /// Валидация переданых параметров
+            /// </summary>
+            var validator = new DrugValidator();
+            validator.Validate(this);
         }
 
         /// <summary>
