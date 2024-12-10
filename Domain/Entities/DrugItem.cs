@@ -1,4 +1,5 @@
-﻿using Domain.Validators;
+﻿using Domain.Events;
+using Domain.Validators;
 
 namespace Domain.Entities;
 
@@ -45,6 +46,19 @@ public class DrugItem : BaseEntity<DrugItem>
     // Навигационные свойства
     public Drug Drug { get; private set; }
     public DrugStore DrugStore { get; private set; }
+
+    #endregion
+
+    #region Методы
+
+    public void UpdateCount(double count)
+    {
+        Count = count;
+        
+        ValidateEntity(new DrugItemValidator());
+        
+        AddDomainEvent(new DrugItemUpdatedEvent(Cost, Count));
+    }
 
     #endregion
 }

@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using Domain.Interfaces;
+using FluentValidation;
 using ValidationException = FluentValidation.ValidationException;
 
 namespace Domain.Entities;
@@ -8,6 +9,11 @@ namespace Domain.Entities;
 /// </summary>
 public abstract class BaseEntity<T> where T : BaseEntity<T>
 {
+    /// <summary>
+    /// Лист доменных событий.
+    /// </summary>
+    private readonly List<IDomainEvent> _domainEvents = [];
+    
     /// <summary>
     /// Конструктор по умолчанию, инициализирующий новый уникальный идентификатор.
     /// </summary>
@@ -83,5 +89,24 @@ public abstract class BaseEntity<T> where T : BaseEntity<T>
 
     #endregion
 
+    #endregion
+    
+    #region Методы доменных событий
+
+    public IReadOnlyList<IDomainEvent> GetDomainEvents()
+    {
+        return _domainEvents.AsReadOnly();
+    }
+
+    public void ClearDomainEvents()
+    {
+        _domainEvents.Clear();
+    }
+
+    protected void AddDomainEvent(IDomainEvent domainEvent)
+    {
+        _domainEvents.Add(domainEvent);
+    }
+    
     #endregion
 }
