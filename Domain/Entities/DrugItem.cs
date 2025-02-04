@@ -51,14 +51,22 @@ public class DrugItem : BaseEntity<DrugItem>
 
     #region Методы
 
-    public void UpdateCount(double count)
+    public void UpdateCount(double newCount)
     {
-        Count = count;
-        
+        var oldCount = Count;
+        Count = newCount;
         ValidateEntity(new DrugItemValidator());
-        
-        AddDomainEvent(new DrugItemUpdatedEvent(Cost, Count));
+        AddDomainEvent(new DrugItemCountUpdatedEvent(Id, DrugId, DrugStoreId, oldCount, newCount));
     }
+    
+    public void UpdatePrice(decimal newPrice)
+    {
+        var oldPrice = Cost;
+        Cost = newPrice;
+        ValidateEntity(new DrugItemValidator());
+        AddDomainEvent(new DrugItemPriceUpdatedEvent(Id, DrugId, DrugStoreId, oldPrice, newPrice));
+    }
+    
 
     #endregion
 }

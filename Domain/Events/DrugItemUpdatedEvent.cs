@@ -2,14 +2,25 @@
 
 namespace Domain.Events;
 
-internal class DrugItemUpdatedEvent : IDomainEvent
+/// <summary>
+/// Событие обновления количества товара в аптеке.
+/// </summary>
+public sealed class DrugItemCountUpdatedEvent : IDomainEvent
 {
-    private readonly decimal? _cost;
-    private readonly double? _count;
-
-    internal DrugItemUpdatedEvent(decimal? cost, double? count)
+    public DrugItemCountUpdatedEvent(Guid drugItemId, Guid drugId, Guid drugStoreId, double oldCount, double newCount)
     {
-        _cost = cost;
-        _count = count;
+        DrugItemId = drugItemId;
+        DrugId = drugId;
+        DrugStoreId = drugStoreId;
+        OldCount = oldCount;
+        NewCount = newCount;
+        UpdatedAt = DateTime.UtcNow;
     }
+
+    public Guid DrugItemId { get; }
+    public Guid DrugId { get; }
+    public Guid DrugStoreId { get; }
+    public double OldCount { get; }
+    public double NewCount { get; }
+    public DateTime UpdatedAt { get; }
 }
